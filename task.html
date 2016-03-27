@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-	<meta charset="UTF-8">
-	<meta name="author" content="@lhg">
-	<title>task 16</title>
-</head>
-<body>
-	<div>
-		<label for="aqi-city-input">城市名称：<input id="aqi-city-input" type="text"></label><br>
-		<label for="aqi-value-input">空气质量指数：<input id="aqi-value-input" type="text"></label><br>
-		<button id="add-btn">确认添加</button>
-	</div>
-	<table id="aqi-table">
 
-	</table>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="@lhg">
+    <title>task 16</title>
+    <style>
+        .app-warn { color: red; }
+    </style>
+</head>
+
+<body>
+    <form id="app">
+        <label for="aqi-city-input">城市名称：
+            <input id="aqi-city-input" type="text" name="city-name">
+        </label>
+        <br>
+        <label for="aqi-value-input">空气质量指数：
+            <input id="aqi-value-input" type="text" name="air-quality">
+        </label>
+        <br>
+        <button class="submit" onclick="">确认添加</button>
+        <div>
+            <table class="table-hook">
+                <tr>
+                    <td>城市</td>
+                    <td>空气质量</td>
+                    <td>操作</td>
+                </tr>
+            </table>
+        </div>
+    </form>
 </body>
-	 <script src="task.js"></script>
+<script src="task.js"></script>
+
 </html>
