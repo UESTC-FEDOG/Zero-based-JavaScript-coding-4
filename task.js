@@ -2,6 +2,7 @@
 
     // 使用validators对象来专门负责验证表单
     var validators = {
+        // 这个对象储存着所有登记过的验证方案
         _configMap: {},
         
         // 该方法用于保存验证方案（一个对象）
@@ -9,7 +10,8 @@
             this._configMap[name] = ruleObj;
         },
         
-        // 这里储存了validators对象支持的验证方法
+        // 这里储存了validators对象支持的验证方法（函数）
+        // 函数附带message属性作为错误提示
         rules: {
             isInteger: (function() {
                 var func = function isInteger(value) {
@@ -42,9 +44,8 @@
                                     
                 collectionNames.forEach(function(name, index) {
                     var value = collection[name],
-                        ruleName = configRules[name];
-                    console.log(that.rules, ruleName,that.rules[ruleName]);
-                    var isValid = that.rules[ruleName](value);
+                        ruleName = configRules[name],
+                        isValid = that.rules[ruleName](value);
                         
                     if(isValid) return;
                     else errors.push(that.rules[ruleName].message);
@@ -90,7 +91,7 @@
             else thisApp.removeItem(e.target.parentElement.parentElement);
         });
         
-        // 为组件提交一个配置方案
+        // 为组件登记一个验证方案
         validators.config('cityAirQuality', {
             'airQuality': 'isInteger',
             'cityName': 'isCityName'
