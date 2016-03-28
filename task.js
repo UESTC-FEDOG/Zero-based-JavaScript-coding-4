@@ -19,7 +19,7 @@
                     return intergerReg.test(value);
                 };
                 
-                func.message = '不是整数';
+                func.message = '数字必须是整数';
                 return func;
             })(),
             
@@ -29,7 +29,7 @@
                     return cityNameReg.test(value);
                 };
                 
-                func.message = '不是合法的城市名';
+                func.message = '城市名不合法';
                 return func;
             })()
         },
@@ -62,6 +62,16 @@
         
     // 这个方法里似乎做了太多事，不过也不知怎么再分解比较好
     AirQualityForm.prototype.init = function() {
+        this._bindAll();
+                
+        // 为组件登记一个验证方案
+        validators.config('cityAirQuality', {
+            'air-quality': 'isInteger',
+            'city-name': 'isCityName'
+        });
+    };
+    
+    AirQualityForm.prototype._bindAll = function(){
         var thisApp = this;
         
         // 对提交按钮的事件代理
@@ -77,10 +87,7 @@
             if(validatingResult.isError) {
                 thisApp.warn(validatingResult); 
             } else {
-                thisApp.addItem(
-                   validatingResult.cityName,
-                   validatingResult.airQuality
-                );                
+                thisApp.addItem(validatingResult);                
             }
             e.preventDefault();
         });
@@ -91,25 +98,19 @@
             else thisApp.removeItem(e.target.parentElement.parentElement);
         });
         
-        // 为组件登记一个验证方案
-        validators.config('cityAirQuality', {
-            'airQuality': 'isInteger',
-            'cityName': 'isCityName'
-        });
     };
-    
-    
     // 该方法负责把表单数据收集并交给validators验证
     AirQualityForm.prototype.validate = function() {
+        var inputEles = this.form.querySelectorAll('input:not([type="checkbox"])'),
+            valueCollection = {};
         
-        var cityName = this.form['city-name'].value.trim(),
-            airQuality = this.form['air-quality'].value.trim(),
-            // 这是收集好、待验证的数据
-            valueCollection = {
-                airQuality: airQuality,
-                cityName: cityName
-            }, 
-            result = validators.validate(valueCollection, 'cityAirQuality');
+        inputEles = Array.prototype.slice.call(inputEles);
+        // 这是收集待验证的数据
+        inputEles.forEach(function(ele) {
+            valueCollection[ele.name] = ele.value.trim();
+        });
+            
+        result = validators.validate(valueCollection, 'cityAirQuality');
         
         // 验证通过，返回收集好的数据；反之返回错误信息数组
         if (result !== true) {
@@ -134,12 +135,15 @@
     };
     
     // 以下三个方法顾名思义
-    AirQualityForm.prototype.addItem = function(city, quality) {
-        var newRow = document.createElement('tr');
+    AirQualityForm.prototype.addItem = function(data) {
+        var newRow = document.createElement('tr'),
+            city = data['city-name'],
+            quality = data['air-quality'];
+            
         newRow.innerHTML = '<td>' + city + '</td>' + '<td>' + quality + '</td>' 
                          + '<td><button class="delete-button">删除</button></td>';
                          
-        this.table.appendChild(newRow);
+        this.table.tBodies[0].appendChild(newRow);
     };
     
     AirQualityForm.prototype.removeItem = function (rowEle) {
