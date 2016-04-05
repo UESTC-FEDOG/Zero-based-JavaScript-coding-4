@@ -1,12 +1,12 @@
 (function() {
 	var aqiData = {};
 	function addAqiData() {
-		var charTest = /^[a-zA-Z\u4e00-\u9fa5]+$/g,
-			numTest = /^\d+$/g,
+		var charTest = /^[a-zA-Z\u4e00-\u9fa5]+$/,
+			numTest = /^\d+$/,
 			city = document.getElementById('aqi-city-input').value,
 			value = document.getElementById('aqi-value-input').value;
-		city = city.replace(/^\s*|\s*|\s*^/g, "");
-		value = value.replace(/^\s*|\s*|\s*^/g, "");
+		city = city.replace(/^\s*|\s*|\s*^/, "");
+		value = value.replace(/^\s*|\s*|\s*^/, "");
 		if(charTest.test(city) && numTest.test(value)) {
 			aqiData[city] = Number(value);
 			return true;
